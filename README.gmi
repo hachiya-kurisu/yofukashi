@@ -6,5 +6,7 @@ nocturnal software for the small web
 
 nex server. only active at night between the hours of 1900 and 0700.
 
-=> nex://higeki.jp/ 悲劇駅
+## 悲劇駅
+
+=> nex://higeki.jp/ nex://higeki.jp/
 
