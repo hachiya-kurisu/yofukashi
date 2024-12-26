@@ -19,7 +19,8 @@ func serve(rw io.ReadWriteCloser, fs fs.FS) {
 
 	now := time.Now()
 	if now.Hour() >= 7 && now.Hour() < 19 {
-		fmt.Fprintf(rw, "come back tonight...")
+		formatted := now.Format("15:04")
+		fmt.Fprintf(rw, "it's only %s. come back tonight...", formatted)
 		return
 	}
 
