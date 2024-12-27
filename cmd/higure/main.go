@@ -11,6 +11,7 @@ import (
 	"net"
 	"os"
 	"strings"
+	"text/template"
 	"time"
 )
 
@@ -19,8 +20,13 @@ func serve(rw io.ReadWriteCloser, fs fs.FS) {
 
 	now := time.Now()
 	if now.Hour() >= 7 && now.Hour() < 19 {
-		formatted := now.Format("15:04")
-		fmt.Fprintf(rw, "it's only %s. come back tonight...", formatted)
+		t, err := template.ParseFS(fs, "closed.nex")
+		if err != nil {
+			formatted := now.Format("15:04")
+			fmt.Fprintf(rw, "it's only %s. come back tonight...", formatted)
+		} else {
+			t.Execute(rw, now)
+		}
 		return
 	}
 
