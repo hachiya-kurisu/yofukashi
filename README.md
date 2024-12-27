@@ -17,3 +17,11 @@ nex server. only active at night between the hours of 7pm and 7am.
 悲劇駅:
 [nex://higeki.jp/](nex://higeki.jp/)
 
+## installation
+
+### go
+
+```
+go install blekksprut.net/yofukashi/cmd/higure@latest
+```
+
