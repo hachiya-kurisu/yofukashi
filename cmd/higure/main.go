@@ -15,11 +15,11 @@ import (
 	"time"
 )
 
-func serve(rw io.ReadWriteCloser, fs fs.FS) {
+func serve(rw io.ReadWriteCloser, fs fs.FS, hours bool) {
 	defer rw.Close()
 
 	now := time.Now()
-	if now.Hour() >= 7 && now.Hour() < 19 {
+	if hours && now.Hour() >= 7 && now.Hour() < 19 {
 		t, err := template.ParseFS(fs, "closed.nex")
 		if err != nil {
 			formatted := now.Format("15:04")
@@ -52,6 +52,7 @@ func serve(rw io.ReadWriteCloser, fs fs.FS) {
 func main() {
 	r := flag.String("r", "/var/nex", "root directory")
 	v := flag.Bool("v", false, "version")
+	a := flag.Bool("a", false, "keep open around the clock")
 	flag.Parse()
 
 	if *v {
@@ -74,6 +75,6 @@ func main() {
 		if err != nil {
 			log.Println(err)
 		}
-		go serve(socket, fs)
+		go serve(socket, fs, !*a)
 	}
 }
