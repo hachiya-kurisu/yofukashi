@@ -4,12 +4,13 @@ nocturnal software for the small web
 
 ## 日暮／higure
 
-nex server. only active at night between the hours of 7pm and 7am.
+nex server. only active at night.
 
 ```
 % higure # serves up /var/gemini
 % higure -r ~/nex # serves up nex from your homedir
 % higure -a # keeps the server open around the clock
+% higure -lat 35 -lon 135 # use lat/lon to calculate sunrise/sunset
 ```
 
 ### stations served by higure
