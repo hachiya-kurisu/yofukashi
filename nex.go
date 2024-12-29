@@ -41,14 +41,17 @@ func (nex *Nex) ServeAt(tm time.Time, rw io.ReadWriteCloser) error {
 			d := set.Sub(tm)
 			var when string
 			switch {
+			case d.Hours() > 2:
+				when = fmt.Sprintf("in about %d hours", int(d.Hours()))
 			case d.Hours() > 1:
-				when = fmt.Sprintf("about %d hours", int(d.Hours()))
-			case d.Minutes() > 1:
-				when = fmt.Sprintf("about %d minutes", int(d.Minutes()))
+				when = fmt.Sprintf("in an hour or two")
+			case d.Minutes() > 5:
+				round := d.Round(5 * time.Minute)
+				when = fmt.Sprintf("in about %d minutes", int(round.Minutes()))
 			case d.Seconds() > 1:
-				when = "a minute"
+				when = "soon"
 			}
-			fmt.Fprintf(rw, "it's still light out. come back in %s...", when)
+			fmt.Fprintf(rw, "it's still light out. come back %s...", when)
 		} else {
 			t.Execute(rw, set)
 		}

@@ -93,17 +93,24 @@ func TestOpeningEstimates(t *testing.T) {
 			t.Errorf("failed to estimate number of hours until opening")
 		}
 	})
-	t.Run("Minutes", func(t *testing.T) {
-		d, _ := time.ParseDuration("-5m")
+	t.Run("AFewHours", func(t *testing.T) {
+		d, _ := time.ParseDuration("-90m")
 		nex.ServeAt(set.Add(d), req)
-		if !strings.Contains(res.String(), "5 minutes") {
+		if !strings.Contains(res.String(), "an hour or two") {
+			t.Errorf("failed to estimate number of hours until opening")
+		}
+	})
+	t.Run("Minutes", func(t *testing.T) {
+		d, _ := time.ParseDuration("-11m")
+		nex.ServeAt(set.Add(d), req)
+		if !strings.Contains(res.String(), "10 minutes") {
 			t.Errorf("failed to estimate number of minutes until opening")
 		}
 	})
 	t.Run("Soon", func(t *testing.T) {
 		d, _ := time.ParseDuration("-3s")
 		nex.ServeAt(set.Add(d), req)
-		if !strings.Contains(res.String(), "a minute") {
+		if !strings.Contains(res.String(), "soon") {
 			t.Errorf("failed to estimate number of seconds until opening")
 		}
 	})
