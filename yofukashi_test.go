@@ -62,7 +62,7 @@ func TestMissingIndex(t *testing.T) {
 }
 
 func TestHours(t *testing.T) {
-	nex := yofukashi.Nex{os.DirFS("."), true, 35.6764, 139.6500}
+	nex := yofukashi.Nex{os.DirFS("."), true, 35.6764}
 	req := request{Reader: strings.NewReader("/"), Writer: io.Discard}
 	err := nex.ServeAt(midday(), req)
 	if err == nil {
@@ -71,7 +71,7 @@ func TestHours(t *testing.T) {
 }
 
 func TestClosingTemplate(t *testing.T) {
-	nex := yofukashi.Nex{os.DirFS("nex"), true, 35.6764, 139.6500}
+	nex := yofukashi.Nex{os.DirFS("nex"), true, 35.6764}
 	req := request{Reader: strings.NewReader("/"), Writer: io.Discard}
 	err := nex.ServeAt(midday(), req)
 	if err == nil {
@@ -80,36 +80,36 @@ func TestClosingTemplate(t *testing.T) {
 }
 
 func TestOpeningEstimates(t *testing.T) {
-	nex := yofukashi.Nex{os.DirFS("."), true, 35.6764, 139.6500}
+	nex := yofukashi.Nex{os.DirFS("."), true, 35.6764}
 	var res strings.Builder
 	req := request{Reader: strings.NewReader("/"), Writer: &res}
 	now := time.Now()
-	_, set := nex.SunriseSunset(now)
+	_, dusk := yofukashi.DawnDusk(now, 35.6764)
 
 	t.Run("Hours", func(t *testing.T) {
 		d, _ := time.ParseDuration("-5h")
-		nex.ServeAt(set.Add(d), req)
+		nex.ServeAt(dusk.Add(d), req)
 		if !strings.Contains(res.String(), "5 hours") {
 			t.Errorf("failed to estimate number of hours until opening")
 		}
 	})
 	t.Run("AFewHours", func(t *testing.T) {
 		d, _ := time.ParseDuration("-90m")
-		nex.ServeAt(set.Add(d), req)
+		nex.ServeAt(dusk.Add(d), req)
 		if !strings.Contains(res.String(), "an hour or two") {
 			t.Errorf("failed to estimate number of hours until opening")
 		}
 	})
 	t.Run("Minutes", func(t *testing.T) {
 		d, _ := time.ParseDuration("-11m")
-		nex.ServeAt(set.Add(d), req)
+		nex.ServeAt(dusk.Add(d), req)
 		if !strings.Contains(res.String(), "10 minutes") {
 			t.Errorf("failed to estimate number of minutes until opening")
 		}
 	})
 	t.Run("Soon", func(t *testing.T) {
 		d, _ := time.ParseDuration("-3s")
-		nex.ServeAt(set.Add(d), req)
+		nex.ServeAt(dusk.Add(d), req)
 		if !strings.Contains(res.String(), "soon") {
 			t.Errorf("failed to estimate number of seconds until opening")
 		}

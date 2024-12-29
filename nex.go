@@ -3,7 +3,6 @@ package yofukashi
 import (
 	"bufio"
 	"fmt"
-	"github.com/nathan-osman/go-sunrise"
 	"io"
 	"io/fs"
 	"strings"
@@ -15,7 +14,6 @@ type Nex struct {
 	FS        fs.FS
 	Nocturnal bool
 	Latitude  float64
-	Longitude float64
 }
 
 func (nex *Nex) Serve(rw io.ReadWriteCloser) error {
@@ -23,22 +21,16 @@ func (nex *Nex) Serve(rw io.ReadWriteCloser) error {
 	return nex.ServeAt(now, rw)
 }
 
-func (nex *Nex) SunriseSunset(tm time.Time) (time.Time, time.Time) {
-	return sunrise.SunriseSunset(
-		nex.Latitude, nex.Longitude,
-		tm.Year(), tm.Month(), tm.Day(),
-	)
-}
 
 func (nex *Nex) ServeAt(tm time.Time, rw io.ReadWriteCloser) error {
 	defer rw.Close()
 
-	rise, set := nex.SunriseSunset(tm)
+	dawn, dusk := DawnDusk(tm, nex.Latitude)
 
-	if nex.Nocturnal && tm.Before(set) && tm.After(rise) {
+	if nex.Nocturnal && tm.Before(dusk) && tm.After(dawn) {
 		t, err := template.ParseFS(nex.FS, "closed.nex")
 		if err != nil {
-			d := set.Sub(tm)
+			d := dusk.Sub(tm)
 			var when string
 			switch {
 			case d.Hours() > 2:
@@ -53,7 +45,7 @@ func (nex *Nex) ServeAt(tm time.Time, rw io.ReadWriteCloser) error {
 			}
 			fmt.Fprintf(rw, "it's still light out. come back %s...", when)
 		} else {
-			t.Execute(rw, set)
+			t.Execute(rw, dusk)
 		}
 		return fmt.Errorf("outside opening hours")
 	}

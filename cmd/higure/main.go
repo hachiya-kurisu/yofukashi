@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"time"
 	"os"
 )
 
@@ -14,7 +15,6 @@ func main() {
 	v := flag.Bool("v", false, "version")
 	a := flag.Bool("a", false, "keep open around the clock")
 	lat := flag.Float64("lat", 35.68, "latitude")
-	lon := flag.Float64("lon", 139.69, "longitude")
 
 	flag.Parse()
 
@@ -33,7 +33,13 @@ func main() {
 	}
 	defer server.Close()
 
-	nex := yofukashi.Nex{FS: fs, Nocturnal: !*a, Latitude: *lat, Longitude: *lon}
+	nex := yofukashi.Nex{FS: fs, Nocturnal: !*a, Latitude: *lat}
+	log.Printf("listening on :1900")
+	if !*a {
+		now := time.Now()
+		dawn, dusk := yofukashi.DawnDusk(now, *lat)
+		log.Printf("%s to %s", dusk.Format("15:04"), dawn.Format("15:04"))
+	}
 	for {
 		socket, err := server.Accept()
 		if err != nil {
