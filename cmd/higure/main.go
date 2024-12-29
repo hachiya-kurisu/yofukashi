@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"log"
 	"net"
-	"time"
 	"os"
+	"time"
 )
 
 func main() {

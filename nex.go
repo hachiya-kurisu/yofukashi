@@ -21,7 +21,6 @@ func (nex *Nex) Serve(rw io.ReadWriteCloser) error {
 	return nex.ServeAt(now, rw)
 }
 
-
 func (nex *Nex) ServeAt(tm time.Time, rw io.ReadWriteCloser) error {
 	defer rw.Close()
 
@@ -45,7 +44,7 @@ func (nex *Nex) ServeAt(tm time.Time, rw io.ReadWriteCloser) error {
 			}
 			fmt.Fprintf(rw, "it's still light out. come back %s...", when)
 		} else {
-			t.Execute(rw, dusk)
+			t.Execute(rw, struct{ Dawn, Dusk, Now time.Time }{dawn, dusk, tm})
 		}
 		return fmt.Errorf("outside opening hours")
 	}
