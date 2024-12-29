@@ -28,14 +28,16 @@ func midday() time.Time {
 	return time.Date(t.Year(), t.Month(), t.Day(), 12, 1, 0, 0, t.Location())
 }
 
-func init() {
-	yofukashi.Now = midnight
+func TestServe(t *testing.T) {
+	nex := yofukashi.Nex{FS: os.DirFS(".")}
+	req := request{Reader: strings.NewReader("/README.gmi"), Writer: io.Discard}
+	nex.Serve(req)
 }
 
 func TestNex(t *testing.T) {
 	nex := yofukashi.Nex{FS: os.DirFS(".")}
 	req := request{Reader: strings.NewReader("/README.gmi"), Writer: io.Discard}
-	err := nex.Serve(req)
+	err := nex.ServeAt(midnight(), req)
 	if err != nil {
 		t.Errorf("should succeed")
 	}
@@ -44,7 +46,7 @@ func TestNex(t *testing.T) {
 func TestIndex(t *testing.T) {
 	nex := yofukashi.Nex{FS: os.DirFS("nex")}
 	req := request{Reader: strings.NewReader("/"), Writer: io.Discard}
-	err := nex.Serve(req)
+	err := nex.ServeAt(midnight(), req)
 	if err != nil {
 		t.Errorf("should serve up the index")
 	}
@@ -53,28 +55,57 @@ func TestIndex(t *testing.T) {
 func TestMissingIndex(t *testing.T) {
 	nex := yofukashi.Nex{FS: os.DirFS(".")}
 	req := request{Reader: strings.NewReader("/"), Writer: io.Discard}
-	err := nex.Serve(req)
+	err := nex.ServeAt(midnight(), req)
 	if err == nil {
 		t.Errorf("no index.nex, should fail")
 	}
 }
 
 func TestHours(t *testing.T) {
-	yofukashi.Now = midday
 	nex := yofukashi.Nex{os.DirFS("."), true, 35.6764, 139.6500}
 	req := request{Reader: strings.NewReader("/"), Writer: io.Discard}
-	err := nex.Serve(req)
+	err := nex.ServeAt(midday(), req)
 	if err == nil {
 		t.Errorf("outside opening hours, should fail")
 	}
 }
 
 func TestClosingTemplate(t *testing.T) {
-	yofukashi.Now = midday
 	nex := yofukashi.Nex{os.DirFS("nex"), true, 35.6764, 139.6500}
 	req := request{Reader: strings.NewReader("/"), Writer: io.Discard}
-	err := nex.Serve(req)
+	err := nex.ServeAt(midday(), req)
 	if err == nil {
 		t.Errorf("outside opening hours, should fail")
 	}
 }
+
+func TestOpeningEstimates(t *testing.T) {
+	nex := yofukashi.Nex{os.DirFS("."), true, 35.6764, 139.6500}
+	var res strings.Builder
+	req := request{Reader: strings.NewReader("/"), Writer: &res}
+	now := time.Now()
+	_, set := nex.SunriseSunset(now)
+
+	t.Run("Hours", func(t *testing.T) {
+		d, _ := time.ParseDuration("-5h")
+		nex.ServeAt(set.Add(d), req)
+		if !strings.Contains(res.String(), "5 hours") {
+			t.Errorf("failed to estimate number of hours until opening")
+		}
+	})
+	t.Run("Minutes", func(t *testing.T) {
+		d, _ := time.ParseDuration("-5m")
+		nex.ServeAt(set.Add(d), req)
+		if !strings.Contains(res.String(), "5 minutes") {
+			t.Errorf("failed to estimate number of minutes until opening")
+		}
+	})
+	t.Run("Soon", func(t *testing.T) {
+		d, _ := time.ParseDuration("-3s")
+		nex.ServeAt(set.Add(d), req)
+		if !strings.Contains(res.String(), "a minute") {
+			t.Errorf("failed to estimate number of seconds until opening")
+		}
+	})
+}
+
