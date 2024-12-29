@@ -108,4 +108,3 @@ func TestOpeningEstimates(t *testing.T) {
 		}
 	})
 }
-
