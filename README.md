@@ -25,6 +25,6 @@ nex server. only active at night.
 ### go
 
 ```
-go install blekksprut.net/yofukashi/cmd/higure@latest
+% go install blekksprut.net/yofukashi/cmd/higure@latest
 ```
 
