@@ -1,4 +1,4 @@
 we're so closed right now
 
-come back after sunset ({{.Format "15:04"}})
+come back tonight ({{.Format "15:04"}})
 
