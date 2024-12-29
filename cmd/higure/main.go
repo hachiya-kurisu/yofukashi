@@ -2,57 +2,20 @@ package main
 
 import (
 	"blekksprut.net/yofukashi"
-	"bufio"
 	"flag"
 	"fmt"
-	"io"
-	"io/fs"
 	"log"
 	"net"
 	"os"
-	"strings"
-	"text/template"
-	"time"
 )
-
-func serve(rw io.ReadWriteCloser, fs fs.FS, hours bool) {
-	defer rw.Close()
-
-	now := time.Now()
-	if hours && now.Hour() >= 7 && now.Hour() < 19 {
-		t, err := template.ParseFS(fs, "closed.nex")
-		if err != nil {
-			formatted := now.Format("15:04")
-			fmt.Fprintf(rw, "it's only %s. come back tonight...", formatted)
-		} else {
-			t.Execute(rw, now)
-		}
-		return
-	}
-
-	reader := bufio.NewScanner(rw)
-	reader.Scan()
-	request := reader.Text()
-
-	request = strings.TrimPrefix(request, "/")
-	if request == "" || request[len(request)-1] == '/' {
-		request = request + "index.nex"
-	}
-
-	f, err := fs.Open(request)
-	if err != nil {
-		fmt.Fprintln(rw, "document not found")
-		return
-	}
-	defer f.Close()
-
-	io.Copy(rw, f)
-}
 
 func main() {
 	r := flag.String("r", "/var/nex", "root directory")
 	v := flag.Bool("v", false, "version")
 	a := flag.Bool("a", false, "keep open around the clock")
+	lat := flag.Float64("lat", 35.68, "latitude")
+	lon := flag.Float64("lon", 139.69, "longitude")
+
 	flag.Parse()
 
 	if *v {
@@ -70,11 +33,12 @@ func main() {
 	}
 	defer server.Close()
 
+	nex := yofukashi.Nex{FS: fs, Nocturnal: !*a, Latitude: *lat, Longitude: *lon}
 	for {
 		socket, err := server.Accept()
 		if err != nil {
 			log.Println(err)
 		}
-		go serve(socket, fs, !*a)
+		go nex.Serve(socket)
 	}
 }

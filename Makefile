@@ -2,7 +2,7 @@ all: higure
 
 again: clean all
 
-higure: yofukashi.go cmd/higure/main.go
+higure: yofukashi.go nex.go cmd/higure/main.go
 	go build -C cmd/higure -o ../../higure
 	
 clean:
