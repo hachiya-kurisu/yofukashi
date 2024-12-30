@@ -10,24 +10,27 @@ import (
 	"time"
 )
 
-type Nex struct {
+// A station at latitude Latitude
+// Serves content from FS
+// Only open at night if Nocturnal is true
+type Station struct {
 	FS        fs.FS
 	Nocturnal bool
 	Latitude  float64
 }
 
-func (nex *Nex) Serve(rw io.ReadWriteCloser) error {
+func (station *Station) Serve(rw io.ReadWriteCloser) error {
 	now := time.Now()
-	return nex.ServeAt(now, rw)
+	return station.ServeAt(now, rw)
 }
 
-func (nex *Nex) ServeAt(tm time.Time, rw io.ReadWriteCloser) error {
+func (station *Station) ServeAt(tm time.Time, rw io.ReadWriteCloser) error {
 	defer rw.Close()
 
-	dawn, dusk := DawnDusk(tm, nex.Latitude)
+	dawn, dusk := DawnDusk(tm, station.Latitude)
 
-	if nex.Nocturnal && tm.Before(dusk) && tm.After(dawn) {
-		t, err := template.ParseFS(nex.FS, "closed.nex")
+	if station.Nocturnal && tm.Before(dusk) && tm.After(dawn) {
+		t, err := template.ParseFS(station.FS, "closed.nex")
 		if err != nil {
 			d := dusk.Sub(tm)
 			var when string
@@ -58,7 +61,7 @@ func (nex *Nex) ServeAt(tm time.Time, rw io.ReadWriteCloser) error {
 		request = request + "index.nex"
 	}
 
-	f, err := nex.FS.Open(request)
+	f, err := station.FS.Open(request)
 	if err != nil {
 		fmt.Fprintln(rw, "document not found")
 		return err

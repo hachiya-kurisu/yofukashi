@@ -33,7 +33,7 @@ func main() {
 	}
 	defer server.Close()
 
-	nex := yofukashi.Nex{FS: fs, Nocturnal: !*a, Latitude: *lat}
+	station := yofukashi.Station{FS: fs, Nocturnal: !*a, Latitude: *lat}
 	log.Printf("listening on :1900")
 	if !*a {
 		now := time.Now()
@@ -45,6 +45,6 @@ func main() {
 		if err != nil {
 			log.Println(err)
 		}
-		go nex.Serve(socket)
+		go station.Serve(socket)
 	}
 }

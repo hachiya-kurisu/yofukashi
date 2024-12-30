@@ -7,6 +7,8 @@ import (
 
 const Version = "0.0.5"
 
+// DawnDusk returns the times of dawn and dusk on the day of t at latitude lat
+// Not very precise (on purpose)
 func DawnDusk(t time.Time, lat float64) (time.Time, time.Time) {
 	day := t.YearDay()
 	x := math.Sin(360 * (float64(day) + 284) / 365.0 * math.Pi / 180)
