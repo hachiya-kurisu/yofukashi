@@ -1,4 +1,7 @@
-package yofukashi
+// Package nex implements a nex station.
+//
+// For more information about nex, see https://nightfall.city/nex/info/.
+package nex
 
 import (
 	"bufio"
@@ -8,26 +11,30 @@ import (
 	"strings"
 	"text/template"
 	"time"
+	"blekksprut.net/yofukashi"
 )
 
-// A station at latitude Latitude
-// Serves content from FS
-// Only open at night if Nocturnal is true
+// A Station serves content from FS.
+// Only open at night if Nocturnal is true.
+// Uses Latitude to roughly estimate dawn and dusk.
 type Station struct {
 	FS        fs.FS
 	Nocturnal bool
 	Latitude  float64
 }
 
+// Reads a nex request from rw and tries to serve the matching file.
 func (station *Station) Serve(rw io.ReadWriteCloser) error {
 	now := time.Now()
 	return station.ServeAt(now, rw)
 }
 
+// Tries to serve a request at the specific time tm.
+// Useful for testing Nocturnal stations.
 func (station *Station) ServeAt(tm time.Time, rw io.ReadWriteCloser) error {
 	defer rw.Close()
 
-	dawn, dusk := DawnDusk(tm, station.Latitude)
+	dawn, dusk := yofukashi.DawnDusk(tm, station.Latitude)
 
 	if station.Nocturnal && tm.Before(dusk) && tm.After(dawn) {
 		t, err := template.ParseFS(station.FS, "closed.nex")

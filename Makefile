@@ -6,7 +6,7 @@ OS != uname -s
 
 PREFIX ?= /usr
 
-higure: yofukashi.go nex.go cmd/higure/main.go
+higure: yofukashi.go nex/nex.go cmd/higure/main.go
 	go build -C cmd/higure -o ../../higure
 	
 clean:

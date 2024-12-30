@@ -1,7 +1,9 @@
+// higure is a nocturnal nex server.
 package main
 
 import (
 	"blekksprut.net/yofukashi"
+	"blekksprut.net/yofukashi/nex"
 	"flag"
 	"fmt"
 	"log"
@@ -33,7 +35,7 @@ func main() {
 	}
 	defer server.Close()
 
-	station := yofukashi.Station{FS: fs, Nocturnal: !*a, Latitude: *lat}
+	station := nex.Station{FS: fs, Nocturnal: !*a, Latitude: *lat}
 	log.Printf("listening on :1900")
 	if !*a {
 		now := time.Now()

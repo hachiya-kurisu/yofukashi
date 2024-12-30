@@ -2,6 +2,7 @@ package yofukashi_test
 
 import (
 	"blekksprut.net/yofukashi"
+	"blekksprut.net/yofukashi/nex"
 	"io"
 	"os"
 	"strings"
@@ -29,13 +30,13 @@ func midday() time.Time {
 }
 
 func TestServe(t *testing.T) {
-	station := yofukashi.Station{FS: os.DirFS(".")}
+	station := nex.Station{FS: os.DirFS(".")}
 	req := request{Reader: strings.NewReader("/README.gmi"), Writer: io.Discard}
 	station.Serve(req)
 }
 
 func TestStation(t *testing.T) {
-	station := yofukashi.Station{FS: os.DirFS(".")}
+	station := nex.Station{FS: os.DirFS(".")}
 	req := request{Reader: strings.NewReader("/README.gmi"), Writer: io.Discard}
 	err := station.ServeAt(midnight(), req)
 	if err != nil {
@@ -44,7 +45,7 @@ func TestStation(t *testing.T) {
 }
 
 func TestIndex(t *testing.T) {
-	station := yofukashi.Station{FS: os.DirFS("nex")}
+	station := nex.Station{FS: os.DirFS("station")}
 	req := request{Reader: strings.NewReader("/"), Writer: io.Discard}
 	err := station.ServeAt(midnight(), req)
 	if err != nil {
@@ -53,7 +54,7 @@ func TestIndex(t *testing.T) {
 }
 
 func TestMissingIndex(t *testing.T) {
-	station := yofukashi.Station{FS: os.DirFS(".")}
+	station := nex.Station{FS: os.DirFS(".")}
 	req := request{Reader: strings.NewReader("/"), Writer: io.Discard}
 	err := station.ServeAt(midnight(), req)
 	if err == nil {
@@ -62,7 +63,7 @@ func TestMissingIndex(t *testing.T) {
 }
 
 func TestHours(t *testing.T) {
-	station := yofukashi.Station{os.DirFS("."), true, 35.6764}
+	station := nex.Station{os.DirFS("."), true, 35.6764}
 	req := request{Reader: strings.NewReader("/"), Writer: io.Discard}
 	err := station.ServeAt(midday(), req)
 	if err == nil {
@@ -71,7 +72,7 @@ func TestHours(t *testing.T) {
 }
 
 func TestClosingTemplate(t *testing.T) {
-	station := yofukashi.Station{os.DirFS("nex"), true, 35.6764}
+	station := nex.Station{os.DirFS("station"), true, 35.6764}
 	req := request{Reader: strings.NewReader("/"), Writer: io.Discard}
 	err := station.ServeAt(midday(), req)
 	if err == nil {
@@ -80,7 +81,7 @@ func TestClosingTemplate(t *testing.T) {
 }
 
 func TestOpeningEstimates(t *testing.T) {
-	station := yofukashi.Station{os.DirFS("."), true, 35.6764}
+	station := nex.Station{os.DirFS("."), true, 35.6764}
 	var res strings.Builder
 	req := request{Reader: strings.NewReader("/"), Writer: &res}
 	now := time.Now()
