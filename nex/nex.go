@@ -4,6 +4,7 @@
 package nex
 
 import (
+	"blekksprut.net/yofukashi"
 	"bufio"
 	"fmt"
 	"io"
@@ -11,7 +12,6 @@ import (
 	"strings"
 	"text/template"
 	"time"
-	"blekksprut.net/yofukashi"
 )
 
 // A Station serves content from FS.

@@ -27,7 +27,7 @@ push:
 	git push github
 
 fmt:
-	gofmt -s -w *.go cmd/*/*.go
+	gofmt -s -w *.go */*.go cmd/*/*.go
 
 README.md: README.gmi INSTALL.gmi
 	cat README.gmi INSTALL.gmi | sisyphus -f markdown > README.md
