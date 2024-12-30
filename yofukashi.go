@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-const Version = "0.0.4"
+const Version = "0.0.5"
 
 func DawnDusk(t time.Time, lat float64) (time.Time, time.Time) {
 	day := t.YearDay()
