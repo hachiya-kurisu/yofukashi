@@ -13,10 +13,3 @@ nex server. only active at night.
 % higure -lat 35 # latitude for calculating dawn/dusk
 ```
 
-### stations served by higure
-
-悲劇駅:
-=> nex://higeki.jp/ nex://higeki.jp/
-
-真夏駅:
-=> nex://manatsu.town/ nex://manatsu.town/
