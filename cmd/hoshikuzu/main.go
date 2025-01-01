@@ -4,9 +4,9 @@ package main
 import (
 	"blekksprut.net/yofukashi"
 	"blekksprut.net/yofukashi/nex"
-	"github.com/blacktop/go-termimg"
 	"flag"
 	"fmt"
+	"github.com/blacktop/go-termimg"
 	"io"
 	"os"
 	"os/exec"
