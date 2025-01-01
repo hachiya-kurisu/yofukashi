@@ -13,6 +13,15 @@ nex server. only active at night.
 % higure -lat 35 # latitude for calculating dawn/dusk
 ```
 
+## 星屑／hoshikuzu
+
+nex client.
+
+```
+% hoshikuzu nex://manatsu.town/
+% hoshikuzu nex://manatsu.town/sky.jpg
+```
+
 ## installation
 
 ### go
