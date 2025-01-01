@@ -24,6 +24,7 @@ cover:
 
 install:
 	install higure /usr/local/bin
+	install hoshikuzu /usr/local/bin
 
 push:
 	got send
