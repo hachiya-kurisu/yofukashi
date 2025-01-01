@@ -1,10 +1,13 @@
-all: higure
+all: higure hoshikuzu
 
 again: clean all
 
 OS != uname -s
 
 PREFIX ?= /usr
+
+hoshikuzu: yofukashi.go nex/nex.go cmd/hoshikuzu/main.go
+	go build -C cmd/hoshikuzu -o ../../hoshikuzu
 
 higure: yofukashi.go nex/nex.go cmd/higure/main.go
 	go build -C cmd/higure -o ../../higure
