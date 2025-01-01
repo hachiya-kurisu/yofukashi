@@ -4,6 +4,7 @@ package main
 import (
 	"blekksprut.net/yofukashi"
 	"blekksprut.net/yofukashi/nex"
+	"github.com/blacktop/go-termimg"
 	"flag"
 	"fmt"
 	"io"
@@ -12,6 +13,18 @@ import (
 	"path/filepath"
 	"strings"
 )
+
+func displayImage(path string) {
+	img, err := termimg.Open(path)
+	if err != nil {
+		panic(err)
+	}
+	is, err := img.Render()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(is)
+}
 
 func main() {
 	v := flag.Bool("v", false, "version")
@@ -30,13 +43,20 @@ func main() {
 		} else {
 			base := filepath.Base(arg)
 			switch strings.ToLower(filepath.Ext(base)) {
-			case ".jpg", ".jpeg", ".png", ".gif":
+			case ".jpg", ".jpeg", ".png":
 				f, err := os.CreateTemp("", "*"+base)
 				if err != nil {
 					fmt.Fprintln(os.Stderr, err)
 				} else {
 					io.Copy(f, r)
-					exec.Command("open", f.Name()).Run()
+					path := f.Name()
+					protocol := termimg.DetectProtocol()
+					switch protocol {
+					case termimg.ITerm2, termimg.Kitty:
+						displayImage(path)
+					default:
+						exec.Command("open", path).Run()
+					}
 				}
 			default:
 				io.Copy(os.Stdout, r)
