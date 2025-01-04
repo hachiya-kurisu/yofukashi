@@ -34,7 +34,7 @@ fmt:
 	gofmt -s -w *.go */*.go cmd/*/*.go
 
 README.md: README.gmi INSTALL.gmi
-	cat README.gmi INSTALL.gmi | sisyphus -f markdown > README.md
+	cat README.gmi INSTALL.gmi | sisyphus -a "." -f markdown > README.md
 
 doc: README.md
 

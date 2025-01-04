@@ -2,15 +2,17 @@
 
 nocturnal software for the small web
 
+![yofukashi.gif]()
+
 ## 日暮／higure
 
 nex server. only active at night.
 
 ```
-% higure # serves up /var/gemini
-% higure -r ~/nex # serves up nex from your homedir
-% higure -a # keeps the server open around the clock
-% higure -lat 35 # latitude for calculating dawn/dusk
+$ higure # serves up /var/gemini
+$ higure -r ~/nex # serves up nex from your homedir
+$ higure -a # keeps the server open around the clock
+$ higure -lat 35 # latitude for calculating dawn/dusk
 ```
 
 ## 星屑／hoshikuzu
@@ -18,8 +20,8 @@ nex server. only active at night.
 nex client.
 
 ```
-% hoshikuzu nex://manatsu.town/
-% hoshikuzu nex://manatsu.town/sky.jpg
+$ hoshikuzu nex://manatsu.town/
+$ hoshikuzu nex://manatsu.town/sky.jpg
 ```
 
 ## installation

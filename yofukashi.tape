@@ -7,6 +7,9 @@ Set FontFamily "Fantasque Sans Mono"
 Set FontSize 24
 Set Width 1200
 Set Height 720
+Set Theme tokyonight
+
+Env PROMPT "$ "
 
 Type "hoshikuzu nex://manatsu.town/ocean/" Sleep 500ms Enter
 
