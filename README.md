@@ -2,7 +2,7 @@
 
 nocturnal software for the small web
 
-![](yofukashi.gif)
+![yofukashi in action (gif)](yofukashi.gif)
 
 ## 日暮／higure
 
