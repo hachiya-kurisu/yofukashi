@@ -19,3 +19,12 @@ func DawnDusk(t time.Time, lat float64) (time.Time, time.Time) {
 	d := time.Duration(int64(hours * 3600 * 1e9))
 	return noon.Add(-d), noon.Add(d)
 }
+
+func Daytime(t time.Time, lat float64) (bool) {
+	dawn, dusk := DawnDusk(t, lat)
+	return t.Before(dusk) && t.After(dawn)
+}
+
+func Nighttime(t time.Time, lat float64) (bool) {
+	return !Daytime(t, lat)
+}

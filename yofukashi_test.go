@@ -10,6 +10,8 @@ import (
 	"time"
 )
 
+const lat = 35.6764
+
 type request struct {
 	io.Writer
 	io.Reader
@@ -63,7 +65,7 @@ func TestMissingIndex(t *testing.T) {
 }
 
 func TestHours(t *testing.T) {
-	station := nex.Station{os.DirFS("."), true, 35.6764}
+	station := nex.Station{os.DirFS("."), true, lat}
 	req := request{Reader: strings.NewReader("/"), Writer: io.Discard}
 	err := station.ServeAt(midday(), req)
 	if err == nil {
@@ -72,7 +74,7 @@ func TestHours(t *testing.T) {
 }
 
 func TestClosingTemplate(t *testing.T) {
-	station := nex.Station{os.DirFS("station"), true, 35.6764}
+	station := nex.Station{os.DirFS("station"), true, lat}
 	req := request{Reader: strings.NewReader("/"), Writer: io.Discard}
 	err := station.ServeAt(midday(), req)
 	if err == nil {
@@ -80,12 +82,26 @@ func TestClosingTemplate(t *testing.T) {
 	}
 }
 
+func TestDaytime(t *testing.T) {
+	midday, _ := time.Parse("15:04", "12:00")
+	if yofukashi.Nighttime(midday, lat) {
+		t.Errorf("12:00 should be considered daytime")
+	}
+}
+
+func TestNighttime(t *testing.T) {
+	evening, _ := time.Parse("15:04", "21:00")
+	if yofukashi.Daytime(evening, lat) {
+		t.Errorf("21:00 should be considered nighttime")
+	}
+}
+
 func TestOpeningEstimates(t *testing.T) {
-	station := nex.Station{os.DirFS("."), true, 35.6764}
+	station := nex.Station{os.DirFS("."), true, lat}
 	var res strings.Builder
 	req := request{Reader: strings.NewReader("/"), Writer: &res}
 	now := time.Now()
-	_, dusk := yofukashi.DawnDusk(now, 35.6764)
+	_, dusk := yofukashi.DawnDusk(now, lat)
 
 	t.Run("Hours", func(t *testing.T) {
 		d, _ := time.ParseDuration("-5h")
