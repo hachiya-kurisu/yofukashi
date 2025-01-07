@@ -46,7 +46,8 @@ func Request(rawURL string) (*Response, error) {
 	if url.Port() == "" {
 		url.Host = url.Host + ":1900"
 	}
-	conn, err := net.Dial("tcp", url.Host)
+	timeout, _ := time.ParseDuration("30s")
+	conn, err := net.DialTimeout("tcp", url.Host, timeout)
 	if err != nil {
 		return nil, err
 	}
