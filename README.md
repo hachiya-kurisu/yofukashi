@@ -9,7 +9,7 @@ nocturnal software for the small web
 nex server. only active at night.
 
 ```
-$ higure # serves up /var/gemini
+$ higure # serves up /var/nex
 $ higure -r ~/nex # serves up nex from your homedir
 $ higure -a # keeps the server open around the clock
 $ higure -lat 35 # latitude for calculating dawn/dusk

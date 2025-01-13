@@ -2,16 +2,17 @@
 package main
 
 import (
-	"blekksprut.net/yofukashi"
-	"blekksprut.net/yofukashi/nex"
 	"flag"
 	"fmt"
-	"github.com/blacktop/go-termimg"
 	"io"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
+
+	"blekksprut.net/yofukashi"
+	"blekksprut.net/yofukashi/nex"
+	"github.com/blacktop/go-termimg"
 )
 
 func displayImage(path string) {
@@ -37,6 +38,9 @@ func main() {
 	}
 
 	for _, arg := range flag.Args() {
+		if !strings.HasPrefix(arg, "nex://") {
+			arg = "nex://" + arg
+		}
 		r, err := nex.Request(arg)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err)
