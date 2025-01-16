@@ -6,6 +6,7 @@ package nex
 import (
 	"blekksprut.net/yofukashi"
 	"bufio"
+	"context"
 	"fmt"
 	"io"
 	"io/fs"
@@ -38,7 +39,7 @@ func (r *Response) Read(b []byte) (int, error) {
 }
 
 // Request makes a nex request to rawURL.
-func Request(rawURL string) (*Response, error) {
+func Request(ctx context.Context, rawURL string) (*Response, error) {
 	url, err := url.Parse(rawURL)
 	if err != nil {
 		return nil, err
@@ -47,7 +48,8 @@ func Request(rawURL string) (*Response, error) {
 		url.Host = url.Host + ":1900"
 	}
 	timeout, _ := time.ParseDuration("30s")
-	conn, err := net.DialTimeout("tcp", url.Host, timeout)
+	dialer := net.Dialer{Timeout: timeout}
+	conn, err := dialer.DialContext(ctx, "tcp", url.Host)
 	if err != nil {
 		return nil, err
 	}

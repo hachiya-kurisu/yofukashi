@@ -2,6 +2,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"io"
@@ -41,7 +42,7 @@ func main() {
 		if !strings.HasPrefix(arg, "nex://") {
 			arg = "nex://" + arg
 		}
-		r, err := nex.Request(arg)
+		r, err := nex.Request(context.Background(), arg)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err)
 		} else {
