@@ -45,27 +45,28 @@ func main() {
 		r, err := nex.Request(context.Background(), arg)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err)
-		} else {
-			base := filepath.Base(arg)
-			switch strings.ToLower(filepath.Ext(base)) {
-			case ".jpg", ".jpeg", ".png":
-				f, err := os.CreateTemp("", "*"+base)
-				if err != nil {
-					fmt.Fprintln(os.Stderr, err)
-				} else {
-					io.Copy(f, r)
-					path := f.Name()
-					protocol := termimg.DetectProtocol()
-					switch protocol {
-					case termimg.ITerm2, termimg.Kitty:
-						displayImage(path)
-					default:
-						exec.Command("open", path).Run()
-					}
+			continue
+		}
+		defer r.Close()
+		base := filepath.Base(arg)
+		switch strings.ToLower(filepath.Ext(base)) {
+		case ".jpg", ".jpeg", ".png":
+			f, err := os.CreateTemp("", "*"+base)
+			if err != nil {
+				fmt.Fprintln(os.Stderr, err)
+			} else {
+				io.Copy(f, r)
+				path := f.Name()
+				protocol := termimg.DetectProtocol()
+				switch protocol {
+				case termimg.ITerm2, termimg.Kitty:
+					displayImage(path)
+				default:
+					exec.Command("open", path).Run()
 				}
-			default:
-				io.Copy(os.Stdout, r)
 			}
+		default:
+			io.Copy(os.Stdout, r)
 		}
 	}
 }
