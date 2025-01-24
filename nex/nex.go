@@ -38,6 +38,11 @@ func (r *Response) Read(b []byte) (int, error) {
 	return r.Raw.Read(b)
 }
 
+// Close the connection
+func (r *Response) Close() {
+	r.Conn.Close()
+}
+
 // Request makes a nex request to rawURL.
 func Request(ctx context.Context, rawURL string) (*Response, error) {
 	url, err := url.Parse(rawURL)
