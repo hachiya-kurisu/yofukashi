@@ -1,3 +1,5 @@
+TEST = ./nex,.
+
 all: higure hoshikuzu
 
 again: clean all
@@ -16,10 +18,10 @@ clean:
 	rm -f higure
 
 test:
-	go test -cover
+	go test -cover -coverpkg $(TEST)
 
 cover:
-	go test -coverprofile=cover.out
+	go test -coverprofile=cover.out -coverpkg $(TEST)
 	go tool cover -html cover.out
 
 install:
