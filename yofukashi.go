@@ -20,11 +20,13 @@ func DawnDusk(t time.Time, lat float64) (time.Time, time.Time) {
 	return noon.Add(-d), noon.Add(d)
 }
 
+// Nighttime returns true if t is before dusk and after dawn
 func Daytime(t time.Time, lat float64) bool {
 	dawn, dusk := DawnDusk(t, lat)
 	return t.Before(dusk) && t.After(dawn)
 }
 
+// Nighttime returns true if t is after dusk and before dawn
 func Nighttime(t time.Time, lat float64) bool {
 	return !Daytime(t, lat)
 }
