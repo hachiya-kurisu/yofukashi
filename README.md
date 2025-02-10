@@ -30,4 +30,5 @@ $ hoshikuzu nex://manatsu.town/sky.jpg
 
 ```
 $ go install blekksprut.net/yofukashi/cmd/higure@latest
+$ go install blekksprut.net/yofukashi/cmd/hoshikuzu@latest
 ```
