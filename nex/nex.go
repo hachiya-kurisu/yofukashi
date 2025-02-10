@@ -27,7 +27,7 @@ type Station struct {
 }
 
 // A Response represents a response from a nex station.
-// It implements the io.Reader interface.
+// It implements the io.ReadCloser interface.
 type Response struct {
 	Raw  io.Reader
 	Conn net.Conn
