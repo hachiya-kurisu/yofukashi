@@ -15,7 +15,7 @@ higure: yofukashi.go nex/nex.go cmd/higure/main.go
 	go build -C cmd/higure -o ../../higure
 	
 clean:
-	rm -f higure
+	rm -f higure hoshikuzu
 
 test:
 	go test -cover -coverpkg $(TEST)
