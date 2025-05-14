@@ -1,6 +1,6 @@
-github.com/blacktop/go-termimg v0.1.16 h1:pHCEXY9X/Ab8AdFVOUlRZyW8sMOvKpO+1g/3C0oQtoE=
-github.com/blacktop/go-termimg v0.1.16/go.mod h1:EvvrvAdLQ4iiEbd6wM/DiVBAzvSJqNw3dxwFxtP932Q=
-golang.org/x/sys v0.32.0 h1:s77OFDvIQeibCmezSnk/q6iAfkdiQaJi4VzroCFrN20=
-golang.org/x/sys v0.32.0/go.mod h1:BJP2sWEmIv4KK5OTEluFJCKSidICx8ciO85XgH3Ak8k=
-golang.org/x/term v0.31.0 h1:erwDkOK1Msy6offm1mOgvspSkslFnIGsFnxOKoufg3o=
-golang.org/x/term v0.31.0/go.mod h1:R4BeIy7D95HzImkxGkTW1UQTtP54tio2RyHz7PwK0aw=
+github.com/blacktop/go-termimg v0.1.17 h1:DcufEDSeGBPke0/GWlnXDCCjsnbtPruK2lWoI6jfs3g=
+github.com/blacktop/go-termimg v0.1.17/go.mod h1:7ZEyhqC8hd29qawXcRC0kUU7N8Bmik7NzCkaOB9SEoA=
+golang.org/x/sys v0.33.0 h1:q3i8TbbEz+JRD9ywIRlyRAQbM0qF7hu24q3teo2hbuw=
+golang.org/x/sys v0.33.0/go.mod h1:BJP2sWEmIv4KK5OTEluFJCKSidICx8ciO85XgH3Ak8k=
+golang.org/x/term v0.32.0 h1:DR4lr0TjUs3epypdhTOkMmuF5CDFJ/8pOnbzMZPQ7bg=
+golang.org/x/term v0.32.0/go.mod h1:uZG1FhGx848Sqfsq4/DlJr3xGGsYMu/L5GW4abiaEPQ=
