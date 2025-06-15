@@ -1,6 +1,6 @@
 module blekksprut.net/yofukashi
 
-go 1.24.3
+go 1.24.4
 
 require (
 	github.com/blacktop/go-termimg v0.1.17
