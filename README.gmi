@@ -24,3 +24,6 @@ $ hoshikuzu nex://manatsu.town/
 $ hoshikuzu nex://manatsu.town/sky.jpg
 ```
 
+## author
+
+=> https://blekksprut.net/ 蜂谷栗栖

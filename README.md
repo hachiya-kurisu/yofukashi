@@ -24,6 +24,9 @@ $ hoshikuzu nex://manatsu.town/
 $ hoshikuzu nex://manatsu.town/sky.jpg
 ```
 
+## author
+
+[蜂谷栗栖](https://blekksprut.net/)
 ## installation
 
 ### go
