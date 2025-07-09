@@ -39,8 +39,8 @@ func (r *Response) Read(b []byte) (int, error) {
 }
 
 // Close the connection
-func (r *Response) Close() {
-	r.Conn.Close()
+func (r *Response) Close() error {
+	return r.Conn.Close()
 }
 
 // Request makes a nex request to rawURL.
@@ -109,7 +109,7 @@ func (station *Station) ServeAt(tm time.Time, rw io.ReadWriteCloser) error {
 
 	f, err := station.FS.Open(request)
 	if err != nil {
-		fmt.Fprintln(rw, "document not found")
+		fmt.Fprintln(rw, "not found")
 		return err
 	}
 	defer f.Close()
