@@ -18,9 +18,11 @@ clean:
 	rm -f higure hoshikuzu
 
 test:
+	YOFUKASHI_TEST_URL=nex://manatsu.town/ \
 	go test -cover -coverpkg $(TEST)
 
 cover:
+	YOFUKASHI_TEST_URL=nex://manatsu.town/ \
 	go test -coverprofile=cover.out -coverpkg $(TEST)
 	go tool cover -html cover.out
 

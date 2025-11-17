@@ -1,13 +1,16 @@
 package yofukashi_test
 
 import (
-	"blekksprut.net/yofukashi"
-	"blekksprut.net/yofukashi/nex"
+	"context"
 	"io"
+	"io/ioutil"
 	"os"
 	"strings"
 	"testing"
 	"time"
+
+	"blekksprut.net/yofukashi"
+	"blekksprut.net/yofukashi/nex"
 )
 
 const lat = 35.6764
@@ -131,4 +134,27 @@ func TestOpeningEstimates(t *testing.T) {
 			t.Errorf("failed to estimate number of seconds until opening")
 		}
 	})
+}
+
+func TestRequest(t *testing.T) {
+	u := os.Getenv("YOFUKASHI_TEST_URL")
+	if u != "" {
+		r, err := nex.Request(context.Background(), u)
+		if err != nil {
+			t.Errorf("failed to get test url")
+		} else {
+			defer r.Close()
+			ioutil.ReadAll(r)
+		}
+
+		_, err = nex.Request(context.Background(), strings.Replace(u, "nex", "", 1))
+		if err == nil {
+			t.Errorf("request to invalid url should fail")
+		}
+
+		_, err = nex.Request(context.Background(), "nex://broken:123456/")
+		if err == nil {
+			t.Errorf("request to invalid url should fail")
+		}
+	}
 }
