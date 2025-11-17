@@ -2,14 +2,15 @@
 package main
 
 import (
-	"blekksprut.net/yofukashi"
-	"blekksprut.net/yofukashi/nex"
 	"flag"
 	"fmt"
 	"log"
 	"net"
 	"os"
 	"time"
+
+	"blekksprut.net/yofukashi"
+	"blekksprut.net/yofukashi/nex"
 )
 
 func main() {
@@ -25,7 +26,10 @@ func main() {
 		os.Exit(0)
 	}
 
-	fs := os.DirFS(*r)
+	root, err := os.OpenRoot(*r)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	Lockdown(*r)
 
@@ -35,7 +39,7 @@ func main() {
 	}
 	defer server.Close()
 
-	station := nex.Station{FS: fs, Nocturnal: !*a, Latitude: *lat}
+	station := nex.Station{FS: root.FS(), Nocturnal: !*a, Latitude: *lat}
 	log.Printf("listening on :1900")
 	if !*a {
 		now := time.Now()
