@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-const Version = "0.1.0"
+const Version = "0.1.1"
 
 // DawnDusk returns the times of dawn and dusk on the day of t at latitude lat.
 // Not very precise (on purpose).
