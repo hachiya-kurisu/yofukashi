@@ -18,6 +18,7 @@ func main() {
 	v := flag.Bool("v", false, "version")
 	a := flag.Bool("a", false, "keep open around the clock")
 	lat := flag.Float64("lat", 35.68, "latitude")
+	lon := flag.Float64("lon", 139.77, "longitude")
 
 	flag.Parse()
 
@@ -39,11 +40,16 @@ func main() {
 	}
 	defer server.Close()
 
-	station := nex.Station{FS: root.FS(), Nocturnal: !*a, Latitude: *lat}
+	station := nex.Station{
+		FS:        root.FS(),
+		Nocturnal: !*a,
+		Latitude:  *lat,
+		Longitude: *lon,
+	}
 	log.Printf("listening on :1900")
 	if !*a {
 		now := time.Now()
-		dawn, dusk := yofukashi.DawnDusk(now, *lat)
+		dawn, dusk := yofukashi.DawnDusk(now, *lat, *lon)
 		log.Printf("%s to %s", dusk.Format("15:04"), dawn.Format("15:04"))
 	}
 	for {

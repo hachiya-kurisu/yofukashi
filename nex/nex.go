@@ -4,7 +4,6 @@
 package nex
 
 import (
-	"blekksprut.net/yofukashi"
 	"bufio"
 	"context"
 	"fmt"
@@ -15,15 +14,18 @@ import (
 	"strings"
 	"text/template"
 	"time"
+
+	"blekksprut.net/yofukashi"
 )
 
 // A Station serves content from FS.
 // Only open at night if Nocturnal is true.
-// Uses Latitude to roughly estimate dawn and dusk.
+// Uses Latitude and Longitude to roughly estimate dawn and dusk.
 type Station struct {
 	FS        fs.FS
 	Nocturnal bool
 	Latitude  float64
+	Longitude float64
 }
 
 // A Response represents a response from a nex station.
@@ -74,7 +76,7 @@ func (station *Station) Serve(rw io.ReadWriteCloser) error {
 func (station *Station) ServeAt(tm time.Time, rw io.ReadWriteCloser) error {
 	defer rw.Close()
 
-	dawn, dusk := yofukashi.DawnDusk(tm, station.Latitude)
+	dawn, dusk := yofukashi.DawnDusk(tm, station.Latitude, station.Longitude)
 	if station.Nocturnal && tm.Before(dusk) && tm.After(dawn) {
 		t, err := template.ParseFS(station.FS, "closed.nex")
 		if err != nil {

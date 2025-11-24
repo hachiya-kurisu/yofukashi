@@ -12,7 +12,7 @@ nex server. only active at night.
 $ higure # serves up /var/nex
 $ higure -r ~/nex # serves up nex from your homedir
 $ higure -a # keeps the server open around the clock
-$ higure -lat 35 # latitude for calculating dawn/dusk
+$ higure -lat 35 -lon 139 # latitude/longitude for calculating dawn/dusk
 ```
 
 ## 星屑／hoshikuzu

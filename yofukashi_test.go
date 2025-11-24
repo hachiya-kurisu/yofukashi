@@ -14,6 +14,7 @@ import (
 )
 
 const lat = 35.6764
+const lon = 139.77
 
 type request struct {
 	io.Writer
@@ -68,7 +69,7 @@ func TestMissingIndex(t *testing.T) {
 }
 
 func TestHours(t *testing.T) {
-	station := nex.Station{os.DirFS("."), true, lat}
+	station := nex.Station{os.DirFS("."), true, lat, lon}
 	req := request{Reader: strings.NewReader("/"), Writer: io.Discard}
 	err := station.ServeAt(midday(), req)
 	if err == nil {
@@ -77,7 +78,7 @@ func TestHours(t *testing.T) {
 }
 
 func TestClosingTemplate(t *testing.T) {
-	station := nex.Station{os.DirFS("station"), true, lat}
+	station := nex.Station{os.DirFS("station"), true, lat, lon}
 	req := request{Reader: strings.NewReader("/"), Writer: io.Discard}
 	err := station.ServeAt(midday(), req)
 	if err == nil {
@@ -86,25 +87,55 @@ func TestClosingTemplate(t *testing.T) {
 }
 
 func TestDaytime(t *testing.T) {
-	midday, _ := time.Parse("15:04", "12:00")
-	if yofukashi.Nighttime(midday, lat) {
+	loc, _ := time.LoadLocation("Asia/Tokyo")
+	midday, _ := time.ParseInLocation("15:04", "12:00", loc)
+	if yofukashi.Nighttime(midday, lat, lon) {
 		t.Errorf("12:00 should be considered daytime")
 	}
 }
 
 func TestNighttime(t *testing.T) {
-	evening, _ := time.Parse("15:04", "21:00")
-	if yofukashi.Daytime(evening, lat) {
+	loc, _ := time.LoadLocation("Asia/Tokyo")
+	evening, _ := time.ParseInLocation("15:04", "21:00", loc)
+	if yofukashi.Daytime(evening, lat, lon) {
 		t.Errorf("21:00 should be considered nighttime")
 	}
 }
 
+func TestNorthPoleSummer(t *testing.T) {
+	summerNorth, _ := time.Parse("2006-01-02 15:04", "2025-06-21 12:00")
+	if yofukashi.Nighttime(summerNorth, 90.0, 0.0) {
+		t.Errorf("north pole summer should be 24hr daylight")
+	}
+}
+
+func TestNorthPoleWinter(t *testing.T) {
+	winterNorth, _ := time.Parse("2006-01-02 15:04", "2025-12-21 12:00")
+	if yofukashi.Daytime(winterNorth, 90.0, 0.0) {
+		t.Errorf("north pole winter should be 24hr darkness")
+	}
+}
+
+func TestSouthPoleSummer(t *testing.T) {
+	summerSouth, _ := time.Parse("2006-01-02 15:04", "2025-06-21 12:00")
+	if yofukashi.Daytime(summerSouth, -90.0, 0.0) {
+		t.Errorf("south pole summer should be 24hr darkness")
+	}
+}
+
+func TestSouthPoleWinter(t *testing.T) {
+	winterSouth, _ := time.Parse("2006-01-02 15:04", "2025-12-21 00:00")
+	if yofukashi.Nighttime(winterSouth, -90.0, 45.0) {
+		t.Errorf("south pole winter should be 24hr daylight")
+	}
+}
+
 func TestOpeningEstimates(t *testing.T) {
-	station := nex.Station{os.DirFS("."), true, lat}
+	station := nex.Station{os.DirFS("."), true, lat, lon}
 	var res strings.Builder
 	req := request{Reader: strings.NewReader("/"), Writer: &res}
 	now := time.Now()
-	_, dusk := yofukashi.DawnDusk(now, lat)
+	_, dusk := yofukashi.DawnDusk(now, lat, lon)
 
 	t.Run("Hours", func(t *testing.T) {
 		d, _ := time.ParseDuration("-5h")
