@@ -5,6 +5,7 @@ all: higure hoshikuzu
 again: clean all
 
 OS != uname -s
+YOFUKASHI_TEST_URL ?= nex://manatsu.town/
 
 PREFIX ?= /usr
 
@@ -18,11 +19,11 @@ clean:
 	rm -f higure hoshikuzu
 
 test:
-	YOFUKASHI_TEST_URL=nex://manatsu.town/ \
+	YOFUKASHI_TEST_URL=$(YOFUKASHI_TEST_URL) \
 	go test -cover -coverpkg $(TEST)
 
 cover:
-	YOFUKASHI_TEST_URL=nex://manatsu.town/ \
+	YOFUKASHI_TEST_URL=$(YOFUKASHI_TEST_URL) \
 	go test -coverprofile=cover.out -coverpkg $(TEST)
 	go tool cover -html cover.out
 
