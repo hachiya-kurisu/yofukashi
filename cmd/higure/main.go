@@ -14,6 +14,7 @@ import (
 )
 
 func main() {
+	l := flag.String("l", ":1900", "address")
 	r := flag.String("r", "/var/nex", "root directory")
 	v := flag.Bool("v", false, "version")
 	a := flag.Bool("a", false, "keep open around the clock")
@@ -34,7 +35,7 @@ func main() {
 
 	Lockdown(*r)
 
-	server, err := net.Listen("tcp", ":1900")
+	server, err := net.Listen("tcp", *l)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -46,7 +47,7 @@ func main() {
 		Latitude:  *lat,
 		Longitude: *lon,
 	}
-	log.Printf("listening on :1900")
+	log.Printf("listening on %s", *l)
 	if !*a {
 		now := time.Now()
 		dawn, dusk := yofukashi.DawnDusk(now, *lat, *lon)
