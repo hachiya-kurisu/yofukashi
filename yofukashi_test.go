@@ -3,7 +3,6 @@ package yofukashi_test
 import (
 	"context"
 	"io"
-	"io/ioutil"
 	"os"
 	"strings"
 	"testing"
@@ -175,7 +174,7 @@ func TestRequest(t *testing.T) {
 			t.Errorf("failed to get test url")
 		} else {
 			defer r.Close()
-			ioutil.ReadAll(r)
+			io.ReadAll(r)
 		}
 
 		_, err = nex.Request(context.Background(), strings.Replace(u, "nex", "", 1))
